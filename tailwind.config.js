@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 const defaultTheme = require('tailwindcss/defaultTheme')
 const defaultColor = require('tailwindcss/colors')
 

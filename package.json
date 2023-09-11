@@ -1,100 +1,85 @@
 {
-    "name": "electron-vite",
-    "version": "0.1.0",
-    "main": "dist/main/index.js",
-    "author": "Aris Ripandi <riipandi@gmail.com>",
-    "license": "MIT",
+    "name": "evitail",
+    "version": "1.0.0",
+    "description": "An Electron application with React and TypeScript",
+    "main": "./out/main/index.js",
+    "author": {
+        "name": "Aris Ripandi",
+        "email": "aris@duck.com"
+    },
+    "homepage": "https://www.electronjs.org",
+    "license": "UNLICENSED",
     "scripts": {
-        "dev": "npm run dev:all",
-        "dev:all": "concurrently -n=vue,ele -c=green,blue \"npm run dev:vue\" \"npm run dev:ele\"",
-        "dev:vue": "vite",
-        "dev:ele": "node -r ts-node/register script/build-main --env=development --watch",
-        "build:vue": "vite build",
-        "build:ele": "node -r ts-node/register script/build-main --env=production",
-        "build": "rimraf dist && npm run build:vue && npm run build:ele && electron-builder"
-    },
-    "build": {
-        "appId": "riipandi@gmail.com",
-        "asar": false,
-        "directories": {
-            "output": "release/${version}"
-        },
-        "files": [
-            "!node_modules",
-            "dist/**"
-        ],
-        "extraResources": {
-            "from": "src/preload",
-            "to": "app/src/preload"
-        },
-        "mac": {
-            "artifactName": "${productName}_${version}.${ext}",
-            "target": [
-                "dmg"
-            ]
-        },
-        "win": {
-            "target": [
-                {
-                    "target": "nsis",
-                    "arch": [
-                        "x64"
-                    ]
-                }
-            ],
-            "artifactName": "${productName}_${version}.${ext}"
-        },
-        "nsis": {
-            "oneClick": false,
-            "perMachine": false,
-            "allowToChangeInstallationDirectory": true,
-            "deleteAppDataOnUninstall": false
-        }
-    },
-    "prettier": {
-        "arrowParens": "always",
-        "bracketSpacing": true,
-        "printWidth": 100,
-        "semi": false,
-        "singleQuote": true,
-        "tabWidth": 4,
-        "trailingComma": "none",
-        "useTabs": false
-    },
-    "devDependencies": {
-        "@rollup/plugin-alias": "^3.1.4",
-        "@rollup/plugin-commonjs": "^19.0.1",
-        "@rollup/plugin-json": "^4.1.0",
-        "@rollup/plugin-node-resolve": "^13.0.2",
-        "@rollup/plugin-typescript": "^8.2.3",
-        "@tailwindcss/aspect-ratio": "^0.2.1",
-        "@tailwindcss/forms": "^0.3.3",
-        "@tailwindcss/line-clamp": "^0.2.1",
-        "@tailwindcss/typography": "^0.4.1",
-        "@types/minimist": "^1.2.2",
-        "@vitejs/plugin-vue": "^1.2.5",
-        "@vue/compiler-sfc": "^3.1.5",
-        "acorn": "^8.4.1",
-        "autoprefixer": "^10.3.1",
-        "chalk": "^4.1.1",
-        "concurrently": "^6.2.0",
-        "dmg-license": "^1.0.9",
-        "electron": "13.1.7",
-        "electron-builder": "^22.11.7",
-        "electron-store": "^8.0.0",
-        "minimist": "^1.2.5",
-        "ora": "^5.4.1",
-        "postcss": "^8.3.5",
-        "prettier": "^2.3.2",
-        "rimraf": "^3.0.2",
-        "rollup-plugin-esbuild": "^4.5.0",
-        "tailwindcss": "^2.2.4",
-        "ts-node": "^10.1.0",
-        "typescript": "^4.3.5",
-        "vite": "^2.4.2",
-        "vitejs-plugin-electron": "^0.1.3"
+        "format": "prettier --write \"**/*.{json,css,cjs,mjs,js,jsx,ts,tsx,yml}\"",
+        "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
+        "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+        "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+        "typecheck": "npm run typecheck:node && npm run typecheck:web",
+        "start": "electron-vite preview",
+        "dev": "electron-vite dev",
+        "build": "npm run typecheck && electron-vite build",
+        "postinstall": "electron-builder install-app-deps",
+        "build:win": "npm run build && electron-builder --win --config",
+        "build:mac": "electron-vite build && electron-builder --mac --config",
+        "build:linux": "electron-vite build && electron-builder --linux --config",
+        "clean": "rimraf node_modules dist out",
+        "test": "vitest run --environment jsdom",
+        "test:ui": "vitest --ui --environment jsdom",
+        "test:watch": "vitest watch --environment jsdom",
+        "coverage": "vitest run --coverage --environment jsdom"
     },
     "dependencies": {
-        "vue": "^3.1.2"
+        "@electron-toolkit/preload": "^2.0.0",
+        "@electron-toolkit/utils": "^2.0.0",
+        "electron-updater": "^6.1.4"
+    },
+    "devDependencies": {
+        "@egoist/tailwindcss-icons": "^1.1.0",
+        "@electron-toolkit/eslint-config-prettier": "^1.0.1",
+        "@electron-toolkit/eslint-config-ts": "^1.0.0",
+        "@electron-toolkit/tsconfig": "^1.0.1",
+        "@iconify-json/heroicons": "^1.1.12",
+        "@iconify-json/ph": "^1.1.6",
+        "@tailwindcss/aspect-ratio": "^0.4.2",
+        "@tailwindcss/forms": "^0.5.6",
+        "@tailwindcss/typography": "^0.5.10",
+        "@testing-library/dom": "^9.3.1",
+        "@testing-library/jest-dom": "^6.1.3",
+        "@testing-library/react": "^14.0.0",
+        "@testing-library/user-event": "^14.4.3",
+        "@types/node": "^20.6.0",
+        "@types/react-dom": "^18.2.7",
+        "@types/react": "^18.2.21",
+        "@types/testing-library__jest-dom": "^5.14.9",
+        "@typescript-eslint/eslint-plugin": "^6.6.0",
+        "@typescript-eslint/parser": "^6.6.0",
+        "@vitejs/plugin-react": "^4.0.4",
+        "@vitest/coverage-v8": "^0.34.4",
+        "@vitest/ui": "^0.34.4",
+        "autoprefixer": "^10.4.15",
+        "clsx": "^2.0.0",
+        "electron-builder": "^24.6.4",
+        "electron-vite": "^1.0.27",
+        "electron": "^26.2.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.0",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-simple-import-sort": "^10.0.0",
+        "eslint": "^8.49.0",
+        "jsdom": "^22.1.0",
+        "postcss": "^8.4.29",
+        "prettier-plugin-tailwindcss": "^0.5.4",
+        "prettier": "^3.0.3",
+        "react-dom": "^18.2.0",
+        "react": "^18.2.0",
+        "regenerator-runtime": "0.14.0",
+        "rimraf": "^5.0.1",
+        "tailwind-merge": "^1.14.0",
+        "tailwindcss-debug-screens": "^2.2.1",
+        "tailwindcss": "^3.3.3",
+        "typescript": "^5.1.6",
+        "vite": "^4.4.9",
+        "vitest": "^0.34.4"
     }
 }
